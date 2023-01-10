@@ -1,0 +1,60 @@
+version: '3.4'
+
+services:
+
+  proxy:
+    build:
+      context: .
+      dockerfile: proxy/Dockerfile
+    ports:
+      - 0.0.0.0:8080:80
+    depends_on:
+      - backend-principal
+      - chat_gpt_service
+      - frontend_victor
+      - frontend_admin
+
+  chat_gpt_service:
+    build: 
+      context: ../ChatGPT-API-server
+    ports:
+      - 0.0.0.0:2001:2001
+    command: ["ChatGPT-API-server", "8080", "clave_administradora", "-listen", "0.0.0.0"]
+    volumes:
+      - ./.env:/app/.env:ro
+    tty: true 
+
+  backend-principal:
+    build:
+      context: ../backend-principal/
+    ports: 
+      - 0.0.0.0:2000:2000
+    tty: true 
+    #command: " go run main.go"
+    volumes:
+    - ../backend-principal:/app:z
+    - ./.env:/app/.env:z
+    
+  frontend_victor:
+    build:
+      context: ../frontend_victor/
+    ports: 
+      - 0.0.0.0:9000:3000
+    tty: true 
+    command: "npm start"
+    volumes:
+    - ../frontend_victor/client/src:/app/src:z
+    - ./.env:/app/.env:z
+
+  frontend_admin:
+    build:
+      context: ../frontend_admin/
+    ports: 
+      - 0.0.0.0:9001:3000
+    tty: true 
+    command: "npm start"
+    volumes:
+    - ../frontend_admin/client/src:/app/src:z
+    - ./.env:/app/.env:z
+    
+  
