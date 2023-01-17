@@ -27,7 +27,7 @@ const Home = () => {
     };
 
     // Values for Api Endpoint Selector
-    const apiEndpoint = 'https://localhost:8080/chatgpt-api/api/ask';
+    const apiEndpoint = 'https://localhost:2000/conversation/inbox/victor';
 
     // Values for GptParamsController
     const temperature = 0.5;
@@ -74,11 +74,12 @@ const Home = () => {
             stop: ['STOP', 'User:'],
         };
 
-        //if apiEndpint match with chatgpt-api  
-        if (apiEndpoint.match('chatgpt-api')) {
-            console.log(`HACEMOS MATCH`);
+
+        if (apiEndpoint.match('/conversation/inbox/')) {
+            console.log(`Hacemos match con ${apiEndpoint}`);
             promptData = {
-                "content": "Hello world" 
+                "from": "admin",
+                "message": "probando desde react" 
             };
         }
 

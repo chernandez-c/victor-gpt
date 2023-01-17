@@ -36,10 +36,10 @@ const ApiEndpointController = ({
                 onChange={(event) => setApiEndpoint(event.target.value)}
                 title='Change the endpoint to make the request.'
             >
-                <option value='https://localhost:8080/chat_gpt/api/ask'>pruebas probenses bien</option>
-                <option value='https://localhost:4567/este_puerto_no_escucha'>pruebas probenses mal</option>
-                <option value='https://api.openai.com/v1/completions'>OpenAI API</option>
-                <option value='https://chat.openai.com/backend-api/conversation'>Chat-GPT backend</option>
+                <option value='https://localhost:2000/conversation/inbox/victor'>Victor</option>
+                <option value='https://localhost:2000/conversation/inbox/admin'>Admin</option>
+                <option value='https://localhost:2000/'>Backend en localhost</option>
+                <option value='https://localhost:8080/api'>Backend a través del nginx</option>
             </select>
 
             <div className='container auto content-center align mg-bot-lg '>

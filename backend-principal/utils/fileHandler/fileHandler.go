@@ -1,4 +1,4 @@
-package utils
+package fileHandler
 
 import (
 	"crypto/rand"
@@ -92,4 +92,12 @@ func randToken(len int) string {
 	b := make([]byte, len)
 	rand.Read(b)
 	return fmt.Sprintf("%x", b)
+}
+
+
+// getCompletionBody Returns the body of the request to create a completion.
+func getDummyMessages(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK) 
+	mensajes := []string{"Eres un pelele", "Maldita sea! Ya me han vuelto a engañar"}
+	fmt.Fprintln(w, mensajes )
 }

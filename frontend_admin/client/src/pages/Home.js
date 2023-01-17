@@ -29,7 +29,7 @@ const Home = () => {
     };
 
     // Values for Api Endpoint Selector
-    const [apiEndpoint, setApiEndpoint] = useState('https://localhost:8080/chat_gpt/api/ask');
+    const [apiEndpoint, setApiEndpoint] = useState('https://localhost:2000/conversation/inbox/victor');
 
     // Values for GptParamsController
     const [temperature, setTemperature] = useState(0.5);
