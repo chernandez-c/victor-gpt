@@ -6,11 +6,22 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"time"
+	"github.com/rs/cors"
 	//"github.com/chernandez-c/victor-gpt/tree/master/backend-principal/utils/gogpt"
 	"github.com/chernandez-c/victor-gpt/tree/master/backend-principal/utils/fileHandler"
 	"github.com/chernandez-c/victor-gpt/tree/master/backend-principal/utils/conversation"
 	"github.com/chernandez-c/victor-gpt/tree/master/backend-principal/utils/mock"
 )
+
+
+type loggingHandler struct {
+	http.Handler
+}
+
+func (h loggingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+	h.Handler.ServeHTTP(w, r)
+}
 
 
 const port = ":2000"
@@ -19,6 +30,8 @@ func main() {
 
 	conversation.InitializeConversationVariables()
 
+
+	
 	router := mux.NewRouter()
 	// Este es el handler para todas las cosas de la conversación con la vista de administración que el pensará que es una IA
 	router.PathPrefix("/conversation").Handler(http.StripPrefix("/conversation", conversation.NewRouter()))
@@ -27,11 +40,22 @@ func main() {
 	//Dummy pruebas
 	router.PathPrefix("/{loquesea}").Handler(http.StripPrefix("", mock.NewRouter()))
 
+
+    // Create a new CORS middleware
+    c := cors.New(cors.Options{
+        AllowedOrigins: []string{"*"},
+    })
+
+    // Wrap the router handler with the CORS and logging middleware 
+    handler := loggingHandler{c.Handler(router)}
+
+
+
 	/*******************************************/
 	/*        ARRANCAMOS EL SERVIDOR         ***/
 	/*******************************************/
 	servidor := &http.Server{
-		Handler: router,
+		Handler: handler,
 		Addr:    port,
 		// Timeouts para evitar que el servidor se quede "colgado" por siempre
 		WriteTimeout: 15 * time.Second,
@@ -44,11 +68,13 @@ func main() {
 	log.Print("use GET requests to /conversation/inbox and /conversation/inbox to get messages from the server to Victor\n")
 
 	fmt.Printf("Escuchando en %s. Presiona CTRL + C para salir", port)
+	
 	log.Fatal(servidor.ListenAndServe())
+    
 
-	//log.Fatal(http.ListenAndServe(port, nil))
 
 }
+
 
 // getCompletionBody Returns the body of the request to create a completion.
 func getDummyMessages(w http.ResponseWriter, r *http.Request) {
