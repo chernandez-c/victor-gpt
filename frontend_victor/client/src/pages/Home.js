@@ -4,9 +4,14 @@ import axios from 'axios';
 import Completion from '../components/Completion';
 import Prompt from '../components/Prompt';
 import PeopleController from '../components/PeopleController';
+import ConversationManager from '../components/ConversationManager';
+import MyComponent from '../components/MyComponent';
 import Error from '../components/Error';
 
+
+
 const Home = () => {
+
     const [loading, setLoading] = useState(false);
     const [showError, setShowError] = useState(false);
     const [error, setError] = useState('');
@@ -29,11 +34,6 @@ const Home = () => {
     // Values for Api Endpoint Selector
     const apiEndpoint = 'https://localhost:2000/conversation/inbox/victor';
 
-    // Values for GptParamsController
-    const temperature = 0.5;
-    const tokens = 512;
-    const nucleus = 0.5;
-    const selectedModel = 'text-davinci-003';
     const threadSize = 3;
 
     // Values for PeopleController
@@ -42,8 +42,6 @@ const Home = () => {
     // Values for Prompt
     const [conversation, setConversation] = useState('');
 
-    // Sets the prompt with instructions.
-    const promptOptions = `Respond in markdown and use a codeblock with the language if there is code. ${persona} STOP`;
 
     // Values for Completion
     const [chatResponse, setChatResponse] = useState([]);
@@ -63,15 +61,6 @@ const Home = () => {
         };
 
         let promptData = {
-            model: selectedModel,
-            prompt: `${promptOptions}${conversation}\nUser: ${question}.\n`,
-            top_p: Number(nucleus),
-            max_tokens: Number(tokens),
-            temperature: Number(temperature),
-            n: 1,
-            stream: false,
-            logprobs: null,
-            stop: ['STOP', 'User:'],
         };
 
 
@@ -138,10 +127,16 @@ const Home = () => {
                 {chatResponse && chatResponse.map((item, index) => <Completion {...item} key={index} />)}
             </div>
             <PeopleController {...forPeopleController} />
-            <Prompt {...forPrompt} />
+
+            <MyComponent />
+
         </div>
 
     );
 };
 
+/*
+<Prompt {...forPrompt} />
+<ConversationManager {...forPrompt} />
+*/
 export default Home;
