@@ -1,9 +1,32 @@
 import Personas from './Personas';
+import axios from 'axios';
+
+
+const apiEndpoint = 'http://localhost:2000/conversation/inbox/victor';
+
+const reset = () => {
+    const element = document.querySelector('#delete-request .status');
+
+    const headers = {
+        //Authorization: `Bearer ${ApiKey}`,
+        'Content-Type': 'application/json',
+    };
+    const body = JSON.stringify({ from: "victor", message: "PROBANDO" })
+
+    const options = {
+        method: 'POST',
+        headers: headers
+    };
+
+    axios.delete(apiEndpoint, body, options)
+    .then(() => element.innerHTML = 'Delete successful');
+};
+
+
 const PeopleController = ({
     setPersona,
     persona,
     personas,
-    reset,
 }) => {
     const personasArray = Object.entries(personas);
     return (
@@ -26,7 +49,7 @@ const PeopleController = ({
 
             <button
                 className='btn mg-top-md mg-left-sm'
-                title='Reset the conversation thread. As the conversation gets bigger, so will the token requirements.'
+                title='Resetea la conversación en el backend. Importante para no guardar una cola de mensajes muy grande'
                 onClick={reset}
             >
                 Reset

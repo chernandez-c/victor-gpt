@@ -30,7 +30,7 @@ services:
     ports: 
       - 0.0.0.0:2000:2000
     tty: true 
-    #command: " go run main.go"
+    command: "go run main.go"
     volumes:
     - ../backend-principal:/app:z
     - ./.env:/app/.env:z

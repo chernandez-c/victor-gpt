@@ -1,11 +1,7 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
-import Completion from '../components/Completion';
-import Prompt from '../components/Prompt';
 import PeopleController from '../components/PeopleController';
-import ConversationManager from '../components/ConversationManager';
-import MyComponent from '../components/MyComponent';
+import {PromptSend, PromptOutput} from '../components/ConversationManager';
 import Error from '../components/Error';
 
 
@@ -31,83 +27,13 @@ const Home = () => {
         mas_personas: 'Se puede añadir a más gente...',
     };
 
-    // Values for Api Endpoint Selector
-    const apiEndpoint = 'https://localhost:2000/conversation/inbox/victor';
 
-    const threadSize = 3;
 
     // Values for PeopleController
     const [persona, setPersona] = useState(personas.default);
 
-    // Values for Prompt
-    const [conversation, setConversation] = useState('');
-
-
-    // Values for Completion
-    const [chatResponse, setChatResponse] = useState([]);
-
-    const ApiKey = `${process.env.REACT_APP_OPENAI_KEY}`;
-
-
-    const onSubmit = async (event, question) => {
-        event.preventDefault();
-
-        setLoading(true);
-        const options = {
-            headers: {
-                Authorization: `Bearer ${ApiKey}`,
-                'Content-Type': 'application/json',
-            },
-        };
-
-        let promptData = {
-        };
-
-
-        if (apiEndpoint.match('/conversation/inbox/')) {
-            console.log(`Hacemos match con ${apiEndpoint}`);
-            promptData = {
-                "from": "admin",
-                "message": "probando desde react" 
-            };
-        }
-
-        try {
-            console.log(`mensaje a ${apiEndpoint}: ${promptData}`);
-            const response = await axios.post(apiEndpoint, promptData, options);
-            const newChat = {
-                botResponse: response.data.choices[0].text,
-                promptQuestion: question,
-                totalTokens: response.data.usage.total_tokens,
-            };
-
-            setLoading(false);
-            setChatResponse([...chatResponse, newChat]);
-        } catch (error) {
-            setLoading(false);
-            setError(error.response.data.error.message);
-            setShowError(true);
-            console.log(error.response);
-        }
-    };
-
-    // Scrolls to bottom of the page as new content is created
-    useEffect(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-    }, [chatResponse]);
-
-    useEffect(() => {
-        if (chatResponse.length > threadSize) {
-            const newArray = [...chatResponse];
-            newArray.splice(0, newArray.length - threadSize);
-            setConversation(newArray.map((chat) => `${chat.promptQuestion}\n${chat.botResponse}\n`));
-        } else {
-            setConversation(chatResponse.map((chat) => `${chat.promptQuestion}\n${chat.botResponse}\n`));
-        }
-    }, [chatResponse, threadSize]);
-
     // Props for Prompt component
-    const forPrompt = { onSubmit, loading };
+    const forPromptSend = { loading, setLoading, persona, setPersona, personas, setShowError, setError, error };
 
     const forPeopleController = {
     setPersona,
@@ -123,12 +49,9 @@ const Home = () => {
     return (
         <div className='container-col auto mg-top-lg radius-md size-lg '>
             {showError && <Error {...forError} />}
-            <div className='container-col '>
-                {chatResponse && chatResponse.map((item, index) => <Completion {...item} key={index} />)}
-            </div>
             <PeopleController {...forPeopleController} />
-
-            <MyComponent />
+            <PromptSend {...forPromptSend}/>
+            <PromptOutput/>
 
         </div>
 
@@ -136,7 +59,6 @@ const Home = () => {
 };
 
 /*
-<Prompt {...forPrompt} />
 <ConversationManager {...forPrompt} />
 */
 export default Home;
