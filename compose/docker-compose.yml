@@ -1,5 +1,10 @@
 version: '3.4'
 
+
+networks:
+  my-network:
+    driver: bridge
+
 services:
 
   proxy:
@@ -10,19 +15,13 @@ services:
       - 0.0.0.0:8080:80
     depends_on:
       - backend-principal
-      - chat_gpt_service
+#     - chat_gpt_service
       - frontend_victor
       - frontend_admin
-
-  chat_gpt_service:
-    build: 
-      context: ../ChatGPT-API-server
-    ports:
-      - 0.0.0.0:2001:2001
-    command: ["ChatGPT-API-server", "8080", "clave_administradora", "-listen", "0.0.0.0"]
-    volumes:
-      - ./.env:/app/.env:ro
-    tty: true 
+    networks:
+      default:
+        aliases:
+          - proxy-network
 
   backend-principal:
     build:
@@ -38,6 +37,8 @@ services:
   frontend_victor:
     build:
       context: ../frontend_victor/
+    #networks:
+    #  - my-network
     ports: 
       - 0.0.0.0:9000:3000
     tty: true 
@@ -49,6 +50,8 @@ services:
   frontend_admin:
     build:
       context: ../frontend_admin/
+    #networks:
+    #  - my-network
     ports: 
       - 0.0.0.0:9001:3000
     tty: true 
@@ -56,5 +59,13 @@ services:
     volumes:
     - ../frontend_admin/client/src:/app/src:z
     - ./.env:/app/.env:z
-    
-  
+
+#  chat_gpt_service:
+#    build: 
+#      context: ../ChatGPT-API-server
+#    ports:
+#      - 0.0.0.0:2001:2001
+#    command: ["ChatGPT-API-server", "8080", "clave_administradora", "-listen", "0.0.0.0"]
+#    volumes:
+#      - ./.env:/app/.env:ro
+#    tty: true 

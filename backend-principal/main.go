@@ -42,7 +42,7 @@ func main() {
 	methods := handlers.AllowedMethods([]string{"OPTIONS", "DELETE", "GET", "HEAD", "POST", "PUT", "PATCH"})
 	origins := handlers.AllowedOrigins([]string{"*"})
 	headers := handlers.AllowedHeaders([]string{"Content-Type"})
-	handler := handlers.CORS(methods, origins, headers)(router)
+	handler := loggingHandler{handlers.CORS(methods, origins, headers)(router)}
 
 
 	/*******************************************/
