@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
-import Completion from '../components/Completion';
-import Prompt from '../components/Prompt';
 import PeopleController from '../components/PeopleController';
+import {PromptSend, PromptOutput} from '../components/ConversationManager';
 import Error from '../components/Error';
 
+
+
 const Home = () => {
+
     const [loading, setLoading] = useState(false);
     const [showError, setShowError] = useState(false);
     const [error, setError] = useState('');
@@ -26,98 +27,13 @@ const Home = () => {
         mas_personas: 'Se puede añadir a más gente...',
     };
 
-    // Values for Api Endpoint Selector
-    const apiEndpoint = 'https://localhost:8080/chatgpt-api/api/ask';
 
-    // Values for GptParamsController
-    const temperature = 0.5;
-    const tokens = 512;
-    const nucleus = 0.5;
-    const selectedModel = 'text-davinci-003';
-    const threadSize = 3;
 
     // Values for PeopleController
     const [persona, setPersona] = useState(personas.default);
 
-    // Values for Prompt
-    const [conversation, setConversation] = useState('');
-
-    // Sets the prompt with instructions.
-    const promptOptions = `Respond in markdown and use a codeblock with the language if there is code. ${persona} STOP`;
-
-    // Values for Completion
-    const [chatResponse, setChatResponse] = useState([]);
-
-    const ApiKey = `${process.env.REACT_APP_OPENAI_KEY}`;
-
-
-    const onSubmit = async (event, question) => {
-        event.preventDefault();
-
-        setLoading(true);
-        const options = {
-            headers: {
-                Authorization: `Bearer ${ApiKey}`,
-                'Content-Type': 'application/json',
-            },
-        };
-
-        let promptData = {
-            model: selectedModel,
-            prompt: `${promptOptions}${conversation}\nUser: ${question}.\n`,
-            top_p: Number(nucleus),
-            max_tokens: Number(tokens),
-            temperature: Number(temperature),
-            n: 1,
-            stream: false,
-            logprobs: null,
-            stop: ['STOP', 'User:'],
-        };
-
-        //if apiEndpint match with chatgpt-api  
-        if (apiEndpoint.match('chatgpt-api')) {
-            console.log(`HACEMOS MATCH`);
-            promptData = {
-                "content": "Hello world" 
-            };
-        }
-
-        try {
-            console.log(`mensaje a ${apiEndpoint}: ${promptData}`);
-            const response = await axios.post(apiEndpoint, promptData, options);
-            const newChat = {
-                botResponse: response.data.choices[0].text,
-                promptQuestion: question,
-                totalTokens: response.data.usage.total_tokens,
-            };
-
-            setLoading(false);
-            setChatResponse([...chatResponse, newChat]);
-        } catch (error) {
-            setLoading(false);
-            setError(error.response.data.error.message);
-            setShowError(true);
-            console.log(error.response);
-        }
-    };
-
-    // Scrolls to bottom of the page as new content is created
-    useEffect(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-    }, [chatResponse]);
-
-    useEffect(() => {
-        if (chatResponse.length > threadSize) {
-            const newArray = [...chatResponse];
-            newArray.splice(0, newArray.length - threadSize);
-            setConversation(newArray.map((chat) => `${chat.promptQuestion}\n${chat.botResponse}\n`));
-        } else {
-            setConversation(chatResponse.map((chat) => `${chat.promptQuestion}\n${chat.botResponse}\n`));
-        }
-    }, [chatResponse, threadSize]);
-
     // Props for Prompt component
-    const forPrompt = { onSubmit, loading };
+    const forPromptSend = { loading, setLoading, persona, setPersona, personas, setShowError, setError, error };
 
     const forPeopleController = {
     setPersona,
@@ -133,14 +49,16 @@ const Home = () => {
     return (
         <div className='container-col auto mg-top-lg radius-md size-lg '>
             {showError && <Error {...forError} />}
-            <div className='container-col '>
-                {chatResponse && chatResponse.map((item, index) => <Completion {...item} key={index} />)}
-            </div>
             <PeopleController {...forPeopleController} />
-            <Prompt {...forPrompt} />
+            <PromptSend {...forPromptSend}/>
+            <PromptOutput/>
+
         </div>
 
     );
 };
 
+/*
+<ConversationManager {...forPrompt} />
+*/
 export default Home;
