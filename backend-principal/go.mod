@@ -1,4 +1,4 @@
-module github.com/chernandez-c/victor-gpt/tree/master/backend-principal
+module backend
 
 go 1.19
 
