@@ -1,27 +1,5 @@
 import Personas from './Personas';
-import axios from 'axios';
-
-
-const apiEndpoint = 'http://localhost:2000/conversation/inbox/victor';
-
-const reset = () => {
-    const element = document.querySelector('#delete-request .status');
-
-    const headers = {
-        //Authorization: `Bearer ${ApiKey}`,
-        'Content-Type': 'application/json',
-    };
-    const body = JSON.stringify({ from: "victor", message: "PROBANDO" })
-
-    const options = {
-        method: 'POST',
-        headers: headers
-    };
-
-    axios.delete(apiEndpoint, body, options)
-    .then(() => element.innerHTML = 'Delete successful');
-};
-
+import ResetButton from "./ResetButton";
 
 const PeopleController = ({
     setPersona,
@@ -47,13 +25,7 @@ const PeopleController = ({
                 })}
             </div>
 
-            <button
-                className='btn mg-top-md mg-left-sm'
-                title='Resetea la conversación en el backend. Importante para no guardar una cola de mensajes muy grande'
-                onClick={reset}
-            >
-                Reset
-            </button>
+            <ResetButton/>
         </div>
     );
 };
