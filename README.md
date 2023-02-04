@@ -1,45 +1,26 @@
 # Victor GPT    
 
-
-El proyecto cuenta con 4 subproyectos (un servicio cada uno) y un orquestador que se sirve de un **nginx** como proxy.
+El proyecto cuenta con 2 subproyectos (un cliente y un backend) y un orquestador que se sirve de un **nginx** como proxy.
 
 ## Servicios
 
-### frontend_victor
+### frontend
 
-Frontend en `react` con la vista de Victor.
+Frontend en `react` con la vista de Víctor.
 
 Aquí es donde el interactuará con todo lo que le pongamos
 
 Lo serviremos en el proxy bajo `/`. Lo exponemos en localhost en el puerto `9000`. 
 
+Los administradores acceden a su vista desde `/admin`.
 
-### frontend_admin
-
-Frontend en `react` con la vista de Administrador. 
-
-Lo utilizaremos para hacerle todas las magias a Victor
-
-Se sirve en el proxy bajo `/admin`. Lo exponemos en localhost en el puerto `9001`. 
-
-
-### backend-principal
+### backend
 
 Api escrita en `go`. 
 
 Incluiremos aquí todas las utilidades que queramos que corran en el servidor. 
 
 Lo serviremos en el proxy bajo `/api`. Corre en el puerto `2000`.
-
-
-### ChatGPT-API-server
-
-Api escrita en `go`. 
-
-Para utilizar `ChatGPT` desde nuestra aplicación. Hay que acabar de afinar...
-
-Lo serviremos en el proxy bajo `/chat-gpt`. Corre en el puerto `2001`.
-
 
 ### compose
 

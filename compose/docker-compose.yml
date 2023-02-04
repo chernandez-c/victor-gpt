@@ -14,29 +14,27 @@ services:
     ports:
       - 0.0.0.0:8080:80
     depends_on:
-      - backend-principal
-#     - chat_gpt_service
-      - frontend_victor
-      - frontend_admin
+      - backend
+      - frontend
     networks:
       default:
         aliases:
           - proxy-network
 
-  backend-principal:
+  backend:
     build:
-      context: ../backend-principal/
+      context: ../backend/
     ports: 
       - 0.0.0.0:2000:2000
     tty: true 
-    command: "go run main.go"
+    command: "go run ."
     volumes:
-    - ../backend-principal:/app:z
+    - ../backend:/app:z
     - ./.env:/app/.env:z
     
-  frontend_victor:
+  frontend:
     build:
-      context: ../frontend_victor/
+      context: ../frontend/
     #networks:
     #  - my-network
     ports: 
@@ -44,20 +42,7 @@ services:
     tty: true 
     command: "npm start"
     volumes:
-    - ../frontend_victor/client/src:/app/src:z
-    - ./.env:/app/.env:z
-
-  frontend_admin:
-    build:
-      context: ../frontend_admin/
-    #networks:
-    #  - my-network
-    ports: 
-      - 0.0.0.0:9001:3000
-    tty: true 
-    command: "npm start"
-    volumes:
-    - ../frontend_admin/client/src:/app/src:z
+    - ../frontend/client/src:/app/src:z
     - ./.env:/app/.env:z
 
 #  chat_gpt_service:
