@@ -15,12 +15,12 @@ check_dependencies docker || exit 1
 
 inform 'Attempting to build'
 debug 'Building docker file'
-docker build -t victor-gpt/backend:latest --target develop $WORKDIR >> $LOGFILE 2>&1 || {
+docker build -t victor-gpt/backend:latest --target production $WORKDIR >> $LOGFILE 2>&1 || {
   error 'Unable to build docker image'
   exit 1
 }
 
 inform 'Setting build version'
-echo $CURRENT_REVISION > .version
+echo $CURRENT_REVISION > $WORKDIR/.version
 
 inform '👌 Done!'
