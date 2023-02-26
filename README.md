@@ -26,7 +26,7 @@ Lo serviremos en el proxy bajo `/api`. Corre en el puerto `2000`.
 
 Utilizamos docker-compose para orquestar todos los contenedores. La configuración del orquestador está alojada en el directorio `compose`.
 
-Además, utilizaremos como proxy un **nginx** configurado dentro del propio proyecto de `compose` (`proxy/nginx.conf`). Este proxy será un 5º servicio.
+Además, utilizaremos como proxy un **nginx** configurado dentro del propio proyecto de `compose` (`proxy/nginx.conf`). Este proxy será un tercer servicio.
 
 ## ¿Cómo lo pongo a funcionar?
 
@@ -34,5 +34,7 @@ Además, utilizaremos como proxy un **nginx** configurado dentro del propio proy
 2. Ir al directorio de compose `cd compose`. 
 3. "Construimos" el proyecto (Se instalan dependencias y generan los contenedores). Ejecutar `docker-compose build`.
 4. Levantamos los contenedores. Ejecutar `docker-compose up`.
+
+Nota: Por defecto no se levantan los servicios en los contenedores para facilitar el desarrollo. Si se quiere que se levanten automáticamente basta con utilizar el **target** `production`
 
 Ya debería estar funcionando y podemos ver la web en http://localhost:8080/
