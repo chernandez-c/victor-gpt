@@ -24,10 +24,12 @@ services:
   backend:
     build:
       context: ../backend/
+      target: develop
+      #target: production
     ports: 
       - 0.0.0.0:2000:2000
     tty: true 
-    command: "go run ."
+    #command: "go run ."
     volumes:
     - ../backend:/app:z
     - ./.env:/app/.env:z
@@ -35,12 +37,12 @@ services:
   frontend:
     build:
       context: ../frontend/
-    #networks:
-    #  - my-network
+      target: develop
+      #target: production
     ports: 
       - 0.0.0.0:9000:3000
     tty: true 
-    command: "npm start"
+    #command: "npm start"
     volumes:
     - ../frontend/client/src:/app/src:z
     - ./.env:/app/.env:z

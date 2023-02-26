@@ -1,6 +1,4 @@
 .build.log
 .version
-node_modules
 .env
-.eslintrc.json
 mis_notas.md
