@@ -22,6 +22,33 @@ services:
           - proxy-network
 
   backend:
+    profiles: ["production"]
+    build:
+      context: ../backend/
+      target: production
+    ports: 
+      - 0.0.0.0:2000:2000
+    tty: true 
+    command: "go run ."
+    volumes:
+    - ../backend:/app:z
+    - ./.env:/app/.env:z
+    
+  frontend:
+    profiles: ["production"]
+    build:
+      context: ../frontend/
+      target: production
+    ports: 
+      - 0.0.0.0:9000:3000
+    tty: true 
+    command: "npm start"
+    volumes:
+    - ../frontend/client/:/app/:z
+    - ./.env:/app/.env:z
+
+  backend:
+    profiles: ["develop"]
     build:
       context: ../backend/
       target: develop
@@ -29,12 +56,12 @@ services:
     ports: 
       - 0.0.0.0:2000:2000
     tty: true 
-    #command: "go run ."
     volumes:
     - ../backend:/app:z
     - ./.env:/app/.env:z
-    
+
   frontend:
+    profiles: ["develop"]
     build:
       context: ../frontend/
       target: develop
@@ -42,9 +69,8 @@ services:
     ports: 
       - 0.0.0.0:9000:3000
     tty: true 
-    #command: "npm start"
     volumes:
-    - ../frontend/client/src:/app/src:z
+    - ../frontend/client/:/app/:z
     - ./.env:/app/.env:z
 
 #  chat_gpt_service:
