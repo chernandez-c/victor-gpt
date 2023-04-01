@@ -78,7 +78,7 @@ func StartServer(port string) {
 	mux.HandleFunc("/write", chatServer.writeMessage)
 	mux.HandleFunc("/deleteAllMessages", chatServer.deleteAllMessages)
 
-	handler := cors.AllowAll().Handler(mux)
+	handler := cors.AllowAll().Handler(logRequest(mux))
 	server := &http.Server{
 		Handler:      handler,
 		Addr:         port,
@@ -89,4 +89,11 @@ func StartServer(port string) {
 	fmt.Printf("Listening on %s.\n", port)
 
 	log.Fatal(server.ListenAndServe())
+}
+
+func logRequest(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
 }
