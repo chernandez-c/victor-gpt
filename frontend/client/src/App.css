@@ -1,0 +1,5 @@
+.background-image {
+    background-image: url('../public/madrigal.jpg');
+    background-size: cover;
+    background-position: center;
+  }

@@ -1,4 +1,4 @@
-FROM node:16.15.1-slim AS BASE
+FROM node:16.15.1-slim AS base
 
 # variables de entorno
 #ENV NPM_REGISTRY http://mi_registro
@@ -14,10 +14,10 @@ COPY ./client/ .
 RUN npm install
 
 
-FROM BASE AS develop
+FROM base AS develop
 VOLUME [ "/app" ]
 
 
-FROM BASE AS production
+FROM base AS production
 # Inicia el servidor
 CMD npm start

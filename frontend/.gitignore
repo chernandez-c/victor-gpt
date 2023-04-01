@@ -1,3 +1,4 @@
+docker-compose.override.yml
 .build.log
 .version
 node_modules

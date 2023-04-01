@@ -1,13 +1,13 @@
-version: '3.4'
-
+version: '3'
 
 networks:
-  my-network:
-    driver: bridge
+  victor_gpt_network:
+    name: victor_gpt_network
+    #external: true
 
 services:
-
   proxy:
+    container_name: nginx-proxy
     build:
       context: .
       dockerfile: proxy/Dockerfile
@@ -17,35 +17,39 @@ services:
       - backend
       - frontend
     networks:
-      default:
-        aliases:
-          - proxy-network
+      - victor_gpt_network
 
   backend:
+    container_name: backend
+    #profiles: ["production"]
     build:
       context: ../backend/
-      target: develop
-      #target: production
+      target: production
     ports: 
       - 0.0.0.0:2000:2000
     tty: true 
-    #command: "go run ."
+    command: "go run ."
     volumes:
     - ../backend:/app:z
     - ./.env:/app/.env:z
-    
+    networks:
+      - victor_gpt_network
+
   frontend:
+    container_name: frontend
+    #profiles: ["production"]
     build:
       context: ../frontend/
-      target: develop
-      #target: production
+      target: production
     ports: 
       - 0.0.0.0:9000:3000
     tty: true 
-    #command: "npm start"
+    command: "npm start"
     volumes:
-    - ../frontend/client/src:/app/src:z
+    - ../frontend/client/:/app/:z
     - ./.env:/app/.env:z
+    networks:
+      - victor_gpt_network
 
 #  chat_gpt_service:
 #    build: 

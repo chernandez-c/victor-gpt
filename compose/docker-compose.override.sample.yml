@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend:
+    container_name: backend-dev
+    #profiles: ["develop"]
+    build:
+      context: ../backend/
+      target: develop
+    ports: 
+      - 0.0.0.0:2000:2000
+    command: "go run ."
+    #command: []
+    tty: true 
+    volumes:
+    - ../backend:/app:z
+    - ./.env:/app/.env:z
+    networks:
+      - victor_gpt_network
+
+  frontend:
+    container_name: frontend-dev
+    #profiles: ["develop"]
+    build:
+      context: ../frontend/
+      target: develop
+    ports: 
+      - 0.0.0.0:9000:3000
+    tty: true 
+    command: "npm start"
+    #command: []
+    volumes:
+    - ../frontend/client/:/app/:z
+    - ./.env:/app/.env:z
+    networks:
+      - victor_gpt_network

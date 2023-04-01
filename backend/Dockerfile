@@ -1,4 +1,4 @@
-FROM golang:1.19 AS BASE
+FROM golang:1.19 AS base
 
 WORKDIR /app
 
@@ -9,10 +9,10 @@ RUN go mod download && go mod verify
 # Parece que no hay que instalar nada de momento
 #RUN go install .
 
-FROM BASE AS develop
+FROM base AS develop
 VOLUME [ "/app" ]
 
-FROM BASE AS production
+FROM base AS production
 
 # Inicia el servidor
 CMD go run .
