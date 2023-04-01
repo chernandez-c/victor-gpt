@@ -1,0 +1,7 @@
+.conversation {
+    overflow: scroll;
+    overflow-x: hidden;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}

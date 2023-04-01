@@ -14,7 +14,6 @@ services:
     tty: true 
     volumes:
     - ../backend:/app:z
-    - ./.env:/app/.env:z
     networks:
       - victor_gpt_network
 
@@ -31,6 +30,5 @@ services:
     #command: []
     volumes:
     - ../frontend/client/:/app/:z
-    - ./.env:/app/.env:z
     networks:
       - victor_gpt_network

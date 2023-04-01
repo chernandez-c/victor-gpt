@@ -5,6 +5,11 @@
     text-decoration: none;
 }
 
+.generalTools {
+    float: left;
+    width: cover;
+}
+
 :root {
     /* Colors */
 
@@ -30,13 +35,6 @@ body {
     color: var(--fc-light);
 }
 
-.conversation {
-    overflow: scroll;
-    overflow-x: hidden;
-
-    max-height: 500px;
-    margin-top: 1rem;
-}
 
 /* ╭───────────────────0─────────╮ */
 /* │        Text Styling        │ */
@@ -180,12 +178,12 @@ img {
     height: 150px;
 }
 
-/* .bg-img { */
-/*     background-image: url('../src/images/bg.jpg'); */
-/*     background-size: cover; */
-/*     background-position: bottom; */
-/*     background-attachment: fixed; */
-/* } */
+.bg-img { 
+    background-image: url('../public/madrigal.jpg'); 
+    background-size: cover; 
+    background-position: bottom; 
+    background-attachment: fixed; 
+} 
 
 .img-logo {
     width: 100px;
@@ -196,14 +194,14 @@ img {
     box-shadow: 1px 2px 0 rgba(170, 121, 89, 0.5);
     background-color: rgba(175, 116, 77, 0.2);
 }
-/* .footer-img { */
-/*     background-image: url('../src/images/IMG_9322.jpg'); */
-/*     background-size: cover; */
-/*     background-position: bottom; */
-/*     background-attachment: fixed; */
-/*     background-size: 90%; */
-/*     background-repeat: no-repeat; */
-/* } */
+ .footer-img { 
+     background-image: url('../public/madrigal.jpg'); 
+     background-size: cover; 
+     background-position: bottom; 
+     background-attachment: fixed; 
+     background-size: 90%; 
+     background-repeat: no-repeat; 
+ } 
 
 /* ╭────────────────────────────╮ */
 /* │          Buttons           │ */
@@ -214,7 +212,7 @@ img {
     font-weight: 400;
     width: 160px;
     color: var(--fc-light);
-    background-color: transparent;
+    background-color: rgba(20, 20, 20, 0.4);
     border-radius: 5px;
     border: solid 2px var(--fc-light);
     transition: 600ms ease all;
@@ -256,10 +254,23 @@ img {
     z-index: 10;
     background-color: var(--background-dark);
 }
+
+/*
 .container {
     display: flex;
     flex-wrap: wrap;
 }
+*/
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 1rem;
+  }
+  
+  .container > div {
+    padding: 1rem;
+  }
 
 .container-col {
     display: flex;

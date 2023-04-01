@@ -3,15 +3,16 @@ import {useState} from 'react';
 import PeopleController from './components/PeopleController';
 import WritingArea from './components/WritingArea';
 import AuthorSelector from "./components/AuthorSelector";
-import ResetButton from "./components/ResetButton";
 import MessageList from "./components/MessageList";
 
 import './App.css';
 
-const DEFAULT_ADMIN_AUTHOR = "Chat-GPT";
+const DEFAULT_ADMIN_AUTHOR = "Victor-GPT";
 
 
-const App = ({isAdmin}) => {
+const App = ({
+    isAdmin
+}) => {
     const [author, setAuthor] = useState((isAdmin && DEFAULT_ADMIN_AUTHOR));
 
     const personas = {
@@ -25,20 +26,32 @@ const App = ({isAdmin}) => {
         // eslint-disable-next-line
         MAP: 'Te llamas Miguel Ángel del Pozo. Eres Inmunólogo. Nunca tienes tiempo para atender a tus doctorandos. \
         Te pasas el día en twitter y escribiendo correos',
-        JuanLuis: 'Eres muy feliz y te gusta utilizar palabras como tronco, pasote y movida',
-        mas_personas: 'Se puede añadir a más gente...',
+        "Juan Luis": 'Eres muy feliz y te gusta utilizar palabras como tronco, pasote y movida',
+        "Más personas...": 'Se puede añadir a más gente...',
     };
 
     const [persona, setPersona] = useState(personas.default);
 
     return (
-        <div className="background-image">
-            <div className='container-col auto mg-top-lg radius-md size-lg ' style={{backgroundImage: `url(${process.env.PUBLIC_URL + '/madrigal.jpg'})`}} >
-                {isAdmin && <AuthorSelector {...{author, setAuthor}} />}
-                <MessageList/>
+        <div className="background-image" >
+            <div className='auto'>
+                {/* Admin Tools or People selector */}
+                <div className='generalTools'>
+                    {isAdmin && <AuthorSelector {...{author, setAuthor}} />}
+                    {!isAdmin && <PeopleController {...{setPersona, persona, personas}} />}
+                </div>
+                
+                <div className='container'>
                 <WritingArea {...{persona, author}}/>
-                {!isAdmin && <PeopleController {...{setPersona, persona, personas}} />}
-                {isAdmin && <ResetButton/>}
+                </div>
+
+                <div className='container-col '>
+                    {<MessageList {...{isAdmin}} />}
+                </div>
+
+
+
+
             </div>
         </div>
     );

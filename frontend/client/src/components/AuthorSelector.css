@@ -1,0 +1,12 @@
+.author-selector {
+        color: antiquewhite;
+        width: 130x;
+        padding: 15px;
+        border-radius: 10px;
+        border: solid 1px antiquewhite;
+        background-color: #333b40;
+        resize: none;
+    
+        margin-top: 10px;
+        margin-bottom: 10px;
+}

@@ -14,26 +14,27 @@ const WritingArea = ({author, persona}) => {
         setUserInput('');
     };
 
+    const handleKeyPress = (event) => {
+        if(event.key === 'Enter'){
+          handleSubmit(event);
+        }
+      }
 
     return (
-        <div className='container auto content-center align mg-bot-lg '>
-            <div className='container '>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor='input-text'>Adelante, pelele!</label>
-                    <textarea
-                        className='input-text bg-mid '
-                        rows={5}
-                        autoFocus={true}
-                        placeholder='Pregunta lo que quieras'
-                        value={userInput}
-                        onChange={(event) => setUserInput(event.target.value)}
-                    />
-                    <button
-                        className='btn mg-top-md mg-left-sm'
-                        type="submit">Enviar</button>
-                </form>
-            </div>
-        </div>
+        <form onSubmit={handleSubmit} className='container-col '>
+            <textarea
+                className='input-text bg-mid '
+                rows={5}
+                autoFocus={true}
+                placeholder='¡Adelante, pelele! Pregunta lo que quieras'
+                value={userInput}
+                onChange={(event) => setUserInput(event.target.value)}
+                onKeyDown={handleKeyPress}
+            />
+            <button
+                className='btn mg-top-md mg-left-sm'
+                type="submit">Enviar</button>
+        </form>
     );
 }
 

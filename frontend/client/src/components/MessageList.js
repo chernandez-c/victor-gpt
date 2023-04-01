@@ -1,8 +1,12 @@
 import React, {useEffect, useRef, useState} from "react";
 import Message from "./Message";
 import {apiGetMessages} from "../api";
+import './Conversation.css';
+import ResetButton from "./ResetButton";
 
-const MessageList = () => {
+const MessageList = ({
+    isAdmin
+}) => {
     const [messages, setMessages] = useState([]);
 
     // Continually ask for new messages.
@@ -37,7 +41,8 @@ const MessageList = () => {
     }, [messages]);
 
     return (
-        <div className='container conversation'>
+        <div className='conversation'>
+            {isAdmin && <ResetButton/>}
             {messages.map((element, index) => (
                 <Message from={element.from} message={element.message} to={element.to} key={index}/>
             ))}

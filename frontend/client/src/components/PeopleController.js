@@ -1,6 +1,9 @@
 import Personas from './Personas';
 import ResetButton from "./ResetButton";
 
+
+
+
 const PeopleController = ({
     setPersona,
     persona,
@@ -24,8 +27,6 @@ const PeopleController = ({
                     );
                 })}
             </div>
-
-            <ResetButton/>
         </div>
     );
 };
