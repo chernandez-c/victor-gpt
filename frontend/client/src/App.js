@@ -4,7 +4,7 @@ import PeopleController from './components/PeopleController';
 import WritingArea from './components/WritingArea';
 import AuthorSelector from "./components/AuthorSelector";
 import MessageList from "./components/MessageList";
-
+import ImageSelector from "./components/ImageSelector.js";
 import './App.css';
 
 const DEFAULT_ADMIN_AUTHOR = "Victor-GPT";
@@ -48,7 +48,10 @@ const App = ({
                 <div className='container-col '>
                     {<MessageList {...{isAdmin}} />}
                 </div>
-
+            
+                <div className='container'>
+                    { <ImageSelector />}
+                </div>
 
 
 

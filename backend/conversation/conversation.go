@@ -11,7 +11,14 @@ type Conversation struct {
 }
 
 func NewConversation() Conversation {
-	return Conversation{}
+	c := Conversation{}
+
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
+	c.addWelcomeMessages()
+
+	return c
 }
 
 func (c *Conversation) AppendMessage(m Message) {
@@ -36,4 +43,10 @@ func (c *Conversation) DeleteAllMessages() {
 	defer c.lock.Unlock()
 
 	c.messages = nil
+	c.addWelcomeMessages()
+}
+
+func (c *Conversation) addWelcomeMessages() {
+	m := NewMessage("Chat-GPT", "¿Qué quieres aprender hoy, máquina?\n\n![Chicken](https://i.imgur.com/KXNWk.gif)", "Ateneo")
+	c.AppendMessage(m)
 }
