@@ -27,13 +27,15 @@ func (m *ApiNewMessage) ToConversationMessage() conversation.Message {
 type ChatServer struct {
 	conversation *conversation.Conversation
 	imageStorage *imageServer.ImageStorage
+	openai       *OpenAIClient
 }
 
 func newChatServer() ChatServer {
 	c := conversation.NewConversation()
 	i := imageServer.NewImageStorage()
+	o := NewOpenAIClient()
 
-	return ChatServer{conversation: &c, imageStorage: &i}
+	return ChatServer{conversation: &c, imageStorage: &i, openai: o}
 }
 
 func (s *ChatServer) GetMessages(w http.ResponseWriter, r *http.Request) {
@@ -66,6 +68,25 @@ func (s *ChatServer) writeMessage(w http.ResponseWriter, r *http.Request) {
 
 func (s *ChatServer) deleteAllMessages(w http.ResponseWriter, r *http.Request) {
 	s.conversation.DeleteAllMessages()
+}
+
+type openAIRequest struct {
+	Prompt string `json:"prompt"`
+	Model  string `json:"model"`
+}
+
+func (s *ChatServer) openaiChat(w http.ResponseWriter, r *http.Request) {
+	var body openAIRequest
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	resp, err := s.openai.Chat(body.Prompt, body.Model)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"response": resp})
 }
 
 // Handler that retrieves images from a directory and returns an array of images
@@ -101,11 +122,13 @@ func StartServer(port string) {
 	chatServer := newChatServer()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/getMessages", chatServer.conversation.GetMessages)
+	mux.HandleFunc("/getMessages", chatServer.GetMessages)
 	mux.HandleFunc("/write", chatServer.writeMessage)
 	mux.HandleFunc("/deleteAllMessages", chatServer.deleteAllMessages)
 
-	mux.HandleFunc("/getImage", chatServer.GetImage)
+	mux.HandleFunc("/openai/chat", chatServer.openaiChat)
+
+	mux.HandleFunc("/getImage", GetImage)
 
 	handler := cors.AllowAll().Handler(logRequest(mux))
 	server := &http.Server{
